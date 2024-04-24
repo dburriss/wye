@@ -1,0 +1,14 @@
+jobs:
+  - id: hello
+    steps:
+      - command: echo "Hello" >> $OUTPUT
+      - command: echo "World" >> $OUTPUT
+  - id: print
+    dependsOn: [hello]
+    vars:
+      - name: GREET
+        value: $$jobs.hello.steps.0.output
+      - name: PLACE
+        value: $$jobs.hello.steps.1.output
+    steps:
+      - command: echo "$GREET $PLACE"

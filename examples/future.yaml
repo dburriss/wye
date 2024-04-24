@@ -1,0 +1,19 @@
+jobs:
+  - id: hello
+    steps:
+      - command: echo "Hello" >> $OUTPUT
+      - command: echo "World" >> $OUTPUT
+        onFail: echo "Oh no!"
+        continueOnFail: true
+    continueOnFail: true
+  - id: print
+    dependsOn: [hello]
+    vars:
+      - name: GREET
+        value: $$jobs.hello.steps.0.output
+        check: "required"
+      - name: PLACE
+        value: $$jobs.hello.steps.1.output
+        check: "regex:[a-zA-Z]+"
+    steps:
+      - command: echo "$GREET $PLACE"

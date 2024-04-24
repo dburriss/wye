@@ -2,6 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Wye.Cli", "Wye.Cli\Wye.Cli.fsproj", "{361BF51C-250F-4165-A68F-84CCC41F5CB0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{B3516097-D0B2-4384-9865-0A8F95989130}"
+	ProjectSection(SolutionItems) = preProject
+		examples\hello_world.yaml = examples\hello_world.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
