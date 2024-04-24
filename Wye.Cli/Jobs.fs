@@ -14,6 +14,10 @@ module Jobs =
         Steps: Step list
         DependsOn: string list
     }
+    
+    type Jobs = {
+        Jobs: Job list
+    }
 
     let executionPlanParallel jobs =
         let rec buildPlan (jobs: Job list) (plan: Job list list) =

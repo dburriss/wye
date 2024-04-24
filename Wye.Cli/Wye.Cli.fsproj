@@ -3,13 +3,19 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
+        <PublishAot>true</PublishAot>
     </PropertyGroup>
 
     <ItemGroup>
         <Compile Include="Lib.fs" />
         <Compile Include="Proc.fs" />
         <Compile Include="Jobs.fs" />
+        <Compile Include="Serializer.fs" />
         <Compile Include="Program.fs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="YamlDotNet" Version="15.1.2" />
     </ItemGroup>
 
 </Project>
