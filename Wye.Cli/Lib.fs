@@ -1,4 +1,6 @@
 namespace Wye
+module Util =
+    let tap f x = f x; x
 
 // ========================================================
 // String: String module 
