@@ -7,19 +7,35 @@ module Serializer =
 
     open System.Collections.Generic
     open YamlDotNet.Serialization
+    
     [<CLIMutable>]
-    type YStep = { command : string }
-    [<CLIMutable>]
-    type YVar = { name : string; value : string }
-    [<CLIMutable>]
-    type YJob = {
-         id : string
-         dependsOn : string array
-         vars : YVar array
-         steps : YStep array
+    [<YamlSerializable>]
+    type YStep = {
+        
+        [<YamlMember>] command : string
     }
+    
     [<CLIMutable>]
-    type YJobs = { jobs : YJob array }
+    [<YamlSerializable>]
+    type YVar = {
+        [<YamlMember>] name : string
+        [<YamlMember>] value : string
+    }
+    
+    [<CLIMutable>]
+    [<YamlSerializable>]
+    type YJob = {
+         [<YamlMember>] id : string
+         [<YamlMember>] dependsOn : string array
+         [<YamlMember>] vars : YVar array
+         [<YamlMember>] steps : YStep array
+    }
+    
+    [<CLIMutable>]
+    [<YamlSerializable>]
+    type YJobs = {
+        [<YamlMember>] jobs : YJob array
+    }
     let private deserializer = DeserializerBuilder().Build()
     let deserializeYaml (yamlString : string) =
         let y = deserializer.Deserialize<YJobs>(yamlString)
