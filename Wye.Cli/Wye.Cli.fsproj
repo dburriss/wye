@@ -24,6 +24,9 @@
         <PackageOutputPath>./nupkg</PackageOutputPath>
         
         <PublishAot>false</PublishAot>
+        
+        <!-- Enable package lock files for deterministic restores -->
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 
     <ItemGroup>
