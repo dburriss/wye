@@ -1,0 +1,89 @@
+name: "Copilot Setup Steps for Multi-Version .NET"
+
+# This workflow sets up a multi-version .NET environment for GitHub Copilot
+# to work with .NET 6, 8, and 10 projects using best practices for security,
+# performance, and maintainability.
+
+on:
+  # Allow manual triggering from the Actions tab
+  workflow_dispatch:
+  # Run when this workflow file is changed
+  push:
+    paths:
+      - '.github/workflows/copilot-setup-steps.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/copilot-setup-steps.yml'
+
+# Security: Use minimum required permissions
+permissions:
+  contents: read
+
+jobs:
+  # Job name must be 'copilot-setup-steps' for Copilot recognition
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout with full history for better context
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better git context
+      
+      # Step 2: Setup multiple .NET SDK versions in a single step
+      # Using specific version numbers for reproducibility
+      - name: Setup .NET SDKs (6.0, 8.0, 10.0)
+        uses: actions/setup-dotnet@v4
+        with:
+          # Multi-version syntax: separate versions with newlines
+          dotnet-version: |
+            6.0.428
+            8.0.416
+            10.0.101
+          # Enable NuGet package caching for performance
+          cache: true
+          # Cache based on lock files for deterministic restores
+          cache-dependency-path: '**/packages.lock.json'
+      
+      # Step 3: Verify .NET installations
+      - name: Verify .NET versions
+        run: |
+          echo "Verifying installed .NET SDK versions:"
+          dotnet --list-sdks
+          echo ""
+          echo "Active .NET version:"
+          dotnet --version
+      
+      # Step 4: Setup .NET environment variables
+      - name: Setup .NET environment variables
+        run: |
+          echo "DOTNET_CLI_TELEMETRY_OPTOUT=1" >> $GITHUB_ENV
+          echo "DOTNET_NOLOGO=1" >> $GITHUB_ENV
+      
+      # Step 5: Restore dependencies with locked mode for deterministic builds
+      # This ensures exact package versions are used as specified in lock files
+      - name: Restore dependencies (locked mode)
+        run: dotnet restore --locked-mode
+      
+      # Step 6: Verify dotnet format availability
+      # Note: dotnet format is built into .NET SDK 6+ and doesn't need separate installation
+      - name: Verify dotnet format
+        run: dotnet format --version
+      
+      # Step 7: Build validation to ensure setup works correctly
+      - name: Build validation
+        run: dotnet build --no-restore --configuration Release
+      
+      # Step 8: Display environment summary
+      - name: Environment summary
+        run: |
+          echo "=== Setup Complete ==="
+          echo "Installed .NET SDKs:"
+          dotnet --list-sdks
+          echo ""
+          echo "dotnet format version:"
+          dotnet format --version
+          echo ""
+          echo "Environment variables:"
+          env | grep DOTNET || true
