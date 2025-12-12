@@ -67,27 +67,24 @@ jobs:
       - name: Restore dependencies (locked mode)
         run: dotnet restore --locked-mode
       
-      # Step 6: Install dotnet-format tool globally for code formatting
-      - name: Install dotnet-format
-        run: dotnet tool install -g dotnet-format || echo "dotnet-format already installed"
-      
-      # Step 7: Verify tool installation
-      - name: Verify dotnet-format installation
+      # Step 6: Verify dotnet format availability
+      # Note: dotnet format is built into .NET SDK 6+ and doesn't need separate installation
+      - name: Verify dotnet format
         run: dotnet format --version
       
-      # Step 8: Build validation to ensure setup works correctly
+      # Step 7: Build validation to ensure setup works correctly
       - name: Build validation
         run: dotnet build --no-restore --configuration Release
       
-      # Step 9: Display environment summary
+      # Step 8: Display environment summary
       - name: Environment summary
         run: |
           echo "=== Setup Complete ==="
           echo "Installed .NET SDKs:"
           dotnet --list-sdks
           echo ""
-          echo "Installed global tools:"
-          dotnet tool list -g | grep dotnet-format || echo "dotnet-format not found in list"
+          echo "dotnet format version:"
+          dotnet format --version
           echo ""
           echo "Environment variables:"
           env | grep DOTNET || true
